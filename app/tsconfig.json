@@ -30,6 +30,10 @@
       "skipLibCheck": true,
       "baseUrl": ".",
       "paths": {
+        "@controllers/*": ["src/controllers/*"],
+        "@entities/*": ["src/entities/*"],
+        "@services/*": ["src/services/*"],
+        "@utils/*": ["src/utils/*"],
         "@mocks/*": ["tests/mocks/*"]
       }
     },

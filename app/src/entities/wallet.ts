@@ -16,7 +16,6 @@ export class Wallet {
   ) {}
 
   public buy(unitCost: number, quantity: number): void {
-    // eslint-disable-next-line max-len
     if (this.stocks === 0 || this.stockAverageValue === 0) {
       this.balance = 0;
       this.stockAverageValue = unitCost;
@@ -37,8 +36,6 @@ export class Wallet {
     if (unitCost > this.stockAverageValue) {
       operationBalance = (unitCost - this.stockAverageValue) * quantity;
     }
-
-    console.log(this.stockAverageValue, this.balance, operationBalance);
 
     this.stocks -= quantity;
     this.balance += operationBalance;

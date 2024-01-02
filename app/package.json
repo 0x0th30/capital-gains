@@ -27,8 +27,8 @@
     "sca": "yarn audit",
     "lint": "eslint src tests",
     "lint:fix": "eslint --fix src tests",
-    "test": "jest --verbose",
-    "test:silent": "jest --silent --verbose",
+    "test:silent": "jest --silent",
+    "test:verbose": "jest --verbose",
     "start:dev": "ts-node-dev -r tsconfig-paths/register src/main.ts",
     "start:prod": "node dist/main.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored"

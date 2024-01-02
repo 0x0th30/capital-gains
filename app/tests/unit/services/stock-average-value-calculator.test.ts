@@ -20,7 +20,7 @@ describe('StockAverageValueCalculator class', () => {
 
       expect(newStockAverageValue).toEqual(expectedNewStocksAverageValue);
     });
-    it('should round value and limit it to 2 decimal cases', () => {
+    it('should round value and limit it to 2 decimal places', () => {
       const currentStocks = 10;
       const currentStocksAverageValue = 20.00;
       const newPurchasedStocks = 5;

@@ -7,17 +7,36 @@ export class Controller {
   ) {}
 
   public start(): void {
-    process.stdin.on('data', async (chunk) => {
-      const entriesArray = chunk.toString().split('\n').filter((entry) => entry !== '');
-      const entriesJSON = JSON.parse(`[${entriesArray.join(',')}]`) as Array<Simulation>;
+    process.stdin.on('data', this.stdinCallback.bind(this));
+  }
 
-      const output: Array<SimulationResults> = [];
-      entriesJSON.forEach((simulation) => {
-        output.push(this.SimulationOperatorEntity.run(simulation));
-      });
+  private handleInput(chunk: Buffer): Array<Simulation> {
+    const entriesArray = chunk.toString().split('\n').filter((entry) => entry !== '');
+    const entriesJSON = JSON.parse(`[${entriesArray.join(',')}]`) as Array<Simulation>;
+    return entriesJSON;
+  }
 
-      output.forEach((line) => console.log(line));
-      process.stdin.destroy();
+  private runSimulations(simulations: Array<Simulation>): Array<SimulationResults> {
+    const simulationResults: Array<SimulationResults> = [];
+
+    simulations.forEach((simulation) => {
+      const simulationResult = this.SimulationOperatorEntity.run(simulation);
+      simulationResults.push(simulationResult);
     });
+
+    return simulationResults;
+  }
+
+  private showSimulationsResults(simulationResults: Array<SimulationResults>): void {
+    simulationResults.forEach((line) => console.log(line));
+  }
+
+  private stdinCallback(chunk: Buffer): void {
+    const input = this.handleInput(chunk);
+    const output = this.runSimulations(input);
+
+    this.showSimulationsResults(output);
+
+    process.stdin.destroy();
   }
 }

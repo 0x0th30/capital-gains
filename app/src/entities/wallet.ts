@@ -1,21 +1,22 @@
+import { Tax } from 'global';
 import { StockAverageValueCalculator } from '@services/stock-average-value-calculator';
 
 export class Wallet {
-  public stocks = 0;
+  private readonly MINIMUM_OPERATION_COST_TO_TAX = 20000;
 
-  public stockAverageValue = 0;
+  private readonly TAX_PERCENT = 0.2;
 
-  public balance = 0;
+  private stocks = 0;
 
-  public operations: Array<any> = [];
+  private stockAverageValue = 0;
 
-  public taxes: Array<any> = [];
+  private balance = 0;
 
   constructor(
     private readonly StockAverageValueCalculatorService: StockAverageValueCalculator,
   ) {}
 
-  public buy(unitCost: number, quantity: number): void {
+  public buy(unitCost: number, quantity: number): Tax {
     if (this.stocks === 0 || this.stockAverageValue === 0) {
       this.balance = 0;
       this.stockAverageValue = unitCost;
@@ -25,10 +26,10 @@ export class Wallet {
       .execute(this.stocks, this.stockAverageValue, quantity, unitCost);
     this.stocks += quantity;
 
-    this.taxes.push({ tax: 0 });
+    return { tax: 0 };
   }
 
-  public sell(unitCost: number, quantity: number): void {
+  public sell(unitCost: number, quantity: number): Tax {
     let operationBalance = 0;
     if (unitCost < this.stockAverageValue) {
       operationBalance = 0 - ((this.stockAverageValue - unitCost) * quantity);
@@ -41,12 +42,12 @@ export class Wallet {
     this.balance += operationBalance;
     const operationTotalCost = unitCost * quantity;
 
-    let tax = 0;
+    let tax: number | string = 0;
     if (operationBalance > 0
       && this.balance > 0
-      && operationTotalCost > 20000
-    ) tax = this.balance * 0.2;
+      && operationTotalCost > this.MINIMUM_OPERATION_COST_TO_TAX
+    ) tax = parseFloat((this.balance * this.TAX_PERCENT).toFixed(2));
 
-    this.taxes.push({ tax });
+    return { tax };
   }
 }

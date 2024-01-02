@@ -10,6 +10,7 @@ export class StockAverageValueCalculator {
       + (newPurchasedStocks * newPurchasedStocksValue))
       / (currentStocks + newPurchasedStocks);
 
-    return newStockAverageValue;
+    const parsedNewStockAverageValue = parseFloat(newStockAverageValue.toFixed(2));
+    return parsedNewStockAverageValue;
   }
 }

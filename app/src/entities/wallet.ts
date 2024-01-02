@@ -16,20 +16,28 @@ export class Wallet {
     private readonly StockAverageValueCalculatorService: StockAverageValueCalculator,
   ) {}
 
+  private updateEmptyWallet(stockAverageValue: number): void {
+    this.balance = 0;
+    this.stockAverageValue = stockAverageValue;
+  }
+
   public buy(unitCost: number, quantity: number): Tax {
     if (this.stocks === 0 || this.stockAverageValue === 0) {
-      this.balance = 0;
-      this.stockAverageValue = unitCost;
+      this.updateEmptyWallet(unitCost);
     }
 
-    this.stockAverageValue = this.StockAverageValueCalculatorService
-      .execute(this.stocks, this.stockAverageValue, quantity, unitCost);
+    this.stockAverageValue = this.StockAverageValueCalculatorService.execute(
+      this.stocks,
+      this.stockAverageValue,
+      quantity,
+      unitCost,
+    );
     this.stocks += quantity;
 
     return { tax: 0 };
   }
 
-  public sell(unitCost: number, quantity: number): Tax {
+  private calculateOperationBalance(unitCost: number, quantity: number): number {
     let operationBalance = 0;
     if (unitCost < this.stockAverageValue) {
       operationBalance = 0 - ((this.stockAverageValue - unitCost) * quantity);
@@ -38,15 +46,34 @@ export class Wallet {
       operationBalance = (unitCost - this.stockAverageValue) * quantity;
     }
 
+    return operationBalance;
+  }
+
+  private updateWalletAfterSell(quantity: number, operationBalance: number): void {
     this.stocks -= quantity;
     this.balance += operationBalance;
-    const operationTotalCost = unitCost * quantity;
+  }
 
-    let tax: number | string = 0;
-    if (operationBalance > 0
-      && this.balance > 0
-      && operationTotalCost > this.MINIMUM_OPERATION_COST_TO_TAX
-    ) tax = parseFloat((this.balance * this.TAX_PERCENT).toFixed(2));
+  private calculateTax(operationBalance: number, operationTotalCost: number): number {
+    const isOperationBalancePositive = (operationBalance > 0);
+    const isWalletBalancePositive = (this.balance > 0);
+    const isOperationTaxed = (operationTotalCost > this.MINIMUM_OPERATION_COST_TO_TAX);
+
+    let tax = 0;
+    if (isOperationBalancePositive && isWalletBalancePositive && isOperationTaxed) {
+      tax = parseFloat((this.balance * this.TAX_PERCENT).toFixed(2));
+    }
+
+    return tax;
+  }
+
+  public sell(unitCost: number, quantity: number): Tax {
+    const operationTotalCost = unitCost * quantity;
+    const operationBalance = this.calculateOperationBalance(unitCost, quantity);
+
+    this.updateWalletAfterSell(quantity, operationBalance);
+
+    const tax = this.calculateTax(operationBalance, operationTotalCost);
 
     return { tax };
   }

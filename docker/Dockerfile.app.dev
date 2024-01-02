@@ -1,0 +1,5 @@
+FROM node:18-alpine
+WORKDIR /usr/app
+COPY app .
+RUN yarn install
+CMD [ "yarn", "start:dev" ]

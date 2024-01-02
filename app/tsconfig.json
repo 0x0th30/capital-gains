@@ -34,13 +34,12 @@
       "@controllers/*": ["src/controllers/*"],
       "@entities/*": ["src/entities/*"],
       "@services/*": ["src/services/*"],
-      "@types/*": ["src/types/*"],
-      "@mocks/*": ["tests/mocks/*"]
+      "@types/*": ["src/types/*"]
     }
   },
   "include": [
     "src/**/*.ts",
     "src/types/global.d.ts",
-    "tests/**/*.ts",
+    "tests/**/*.ts"
   ]
 }

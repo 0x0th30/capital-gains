@@ -21,37 +21,39 @@ export class Wallet {
     this.stockAverageValue = stockAverageValue;
   }
 
+  private updateWalletAfterBuy(newStocks: number, newStockAverageValue: number): void {
+    this.stocks += newStocks;
+    this.stockAverageValue = newStockAverageValue;
+  }
+
   public buy(unitCost: number, quantity: number): Tax {
     if (this.stocks === 0 || this.stockAverageValue === 0) {
       this.updateEmptyWallet(unitCost);
     }
 
-    this.stockAverageValue = this.StockAverageValueCalculatorService.execute(
-      this.stocks,
-      this.stockAverageValue,
-      quantity,
-      unitCost,
-    );
-    this.stocks += quantity;
+    const newStockAverageValue = this.StockAverageValueCalculatorService
+      .execute(this.stocks, this.stockAverageValue, quantity, unitCost);
+
+    this.updateWalletAfterBuy(quantity, newStockAverageValue);
 
     return { tax: 0 };
   }
 
-  private calculateOperationBalance(unitCost: number, quantity: number): number {
+  private calculateSellBalance(unitCost: number, soldStocks: number): number {
     let operationBalance = 0;
     if (unitCost < this.stockAverageValue) {
-      operationBalance = 0 - ((this.stockAverageValue - unitCost) * quantity);
+      operationBalance = 0 - ((this.stockAverageValue - unitCost) * soldStocks);
     }
     if (unitCost > this.stockAverageValue) {
-      operationBalance = (unitCost - this.stockAverageValue) * quantity;
+      operationBalance = (unitCost - this.stockAverageValue) * soldStocks;
     }
 
     return operationBalance;
   }
 
-  private updateWalletAfterSell(quantity: number, operationBalance: number): void {
-    this.stocks -= quantity;
-    this.balance += operationBalance;
+  private updateWalletAfterSell(soldStocks: number, sellBalance: number): void {
+    this.stocks -= soldStocks;
+    this.balance += sellBalance;
   }
 
   private calculateTax(operationBalance: number, operationTotalCost: number): number {
@@ -69,7 +71,7 @@ export class Wallet {
 
   public sell(unitCost: number, quantity: number): Tax {
     const operationTotalCost = unitCost * quantity;
-    const operationBalance = this.calculateOperationBalance(unitCost, quantity);
+    const operationBalance = this.calculateSellBalance(unitCost, quantity);
 
     this.updateWalletAfterSell(quantity, operationBalance);
 

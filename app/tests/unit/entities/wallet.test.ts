@@ -53,6 +53,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
@@ -66,6 +67,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
@@ -78,6 +80,7 @@ describe('Wallet class', () => {
       const quantity = 10;
 
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
+      StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
       WalletMock.updateEmptyWallet.mockImplementation();
@@ -94,6 +97,7 @@ describe('Wallet class', () => {
       const quantity = 10;
 
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
+      StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
       (WalletSUT as any).stocks = currentStocks;
@@ -114,6 +118,7 @@ describe('Wallet class', () => {
 
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
+      WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
       WalletSUT.buy(unitCost, quantity);
 
@@ -126,6 +131,7 @@ describe('Wallet class', () => {
 
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
+      WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
       WalletSUT.buy(unitCost, quantity);
 

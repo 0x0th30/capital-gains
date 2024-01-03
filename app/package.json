@@ -29,8 +29,8 @@
     "lint:fix": "eslint --fix src tests",
     "test:integration:quiet": "jest --silent integration",
     "test:integration:verbose": "jest --silent --verbose integration",
-    "test:unit:quiet": "jest --silent unit",
-    "test:unit:verbose": "jest --silent --verbose unit",
+    "test:unit:quiet": "jest --silent --coverage unit",
+    "test:unit:verbose": "jest --silent --verbose --coverage unit",
     "start:dev": "ts-node-dev -r tsconfig-paths/register src/main.ts",
     "start:prod": "node dist/main.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored"

@@ -45,6 +45,16 @@ If you built it using yarn, navigate to the `app/` folder and run the following 
 $ yarn start:prod
 ```
 
+### Running Tests
+To run unit and integration test suites, navigate to the `app/` folder and run the following commands (just replace "quiet" by "verbose" to get execution details):
+
+```bash
+$ yarn install
+$ yarn test:unit:quiet
+$ yarn test:integration:quiet
+```
+Note that running unit tests the coverage report will be auto generated and can be located inside `app/` folder.
+
 ### Notes
 To avoid errors and frustration, consider the following important points:
 

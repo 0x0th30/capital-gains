@@ -1,6 +1,5 @@
-# capital-gains
-
-CLI application for running simulations of buying/selling stocks and calculating taxes for each simulation.
+# Capital Gains CLI
+CLI application for simulating buying/selling stocks and calculating taxes for each scenario.
 
 ### Build App
 The application was built using a Docker infrastructure. To build the Docker image, navigate to the root directory and run the following command:
@@ -56,3 +55,7 @@ To avoid errors and frustration, consider the following important points:
 ```bash
 $ echo '[{"operation":"buy", "unit-cost":10.00, "quantity": 100}, {"operation":"sell", "unit-cost":15.00, "quantity": 50}]\n[{"operation":"buy", "unit-cost":10.00, "quantity": 100}, {"operation":"sell", "unit-cost":15.00, "quantity": 50}]' | docker run -i capital-gains:latest
 ```
+
+<br/>
+
+Read about development decisions [here](docs/development.md).

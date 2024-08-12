@@ -1,4 +1,4 @@
-import { Tax } from 'global';
+import { OperationError, Stock, Tax } from 'global';
 import { StockAverageValueCalculator } from '@services/stock-average-value-calculator';
 
 export class Wallet {
@@ -6,30 +6,26 @@ export class Wallet {
 
   private readonly TAX_PERCENT = 0.2;
 
-  private stocks = 0;
+  private stocks: Array<Stock> = [];
 
-  private stockAverageValue = 0;
+  private _stocks = 0;
 
-  private balance = 0;
+  private _stockAverageValue = 0;
+
+  private _balance = 0;
+
+  private errorCounter = 0;
 
   constructor(
     private readonly StockAverageValueCalculatorService: StockAverageValueCalculator,
   ) {}
 
-  private updateEmptyWallet(stockAverageValue: number): void {
-    this.balance = 0;
-    this.stockAverageValue = stockAverageValue;
-  }
+  public buy(unitCost: number, quantity: number, ticker: string): Tax | OperationError {
+    const isAccountBlocked = this.isAccountBlocked();
+    if (isAccountBlocked) return { error: 'Your account is blocked' };
 
-  private updateWalletAfterBuy(newStocks: number, newStockAverageValue: number): void {
-    this.stocks += newStocks;
-    this.stockAverageValue = newStockAverageValue;
-  }
-
-  public buy(unitCost: number, quantity: number): Tax {
-    if (this.stocks === 0 || this.stockAverageValue === 0) {
-      this.updateEmptyWallet(unitCost);
-    }
+    const isWalletEmpty = this.isWalletEmpty(ticker);
+    if (isWalletEmpty) this.updateEmptyWallet(unitCost);
 
     const newStockAverageValue = this.StockAverageValueCalculatorService
       .execute(this.stocks, this.stockAverageValue, quantity, unitCost);
@@ -37,6 +33,55 @@ export class Wallet {
     this.updateWalletAfterBuy(quantity, newStockAverageValue);
 
     return { tax: 0 };
+  }
+
+  public sell(unitCost: number, quantity: number, ticker: string): Tax | OperationError {
+    const isAccountBlocked = this.isAccountBlocked();
+    if (isAccountBlocked) return { error: 'Your account is blocked' };
+
+    const hasWalletSufficientStocksToSell = this
+      .hasWalletSufficientStocksToSell(quantity);
+    if (!hasWalletSufficientStocksToSell) {
+      this.errorCounter += 1;
+      return { error: 'Can\'t sell more stocks than you have' };
+    }
+
+    const operationTotalCost = unitCost * quantity;
+    const operationBalance = this.calculateSellBalance(unitCost, quantity);
+
+    this.updateWalletAfterSell(quantity, operationBalance);
+
+    const tax = this.calculateTax(operationBalance, operationTotalCost);
+
+    return { tax };
+  }
+
+  private isWalletEmpty(ticker: string): boolean {
+    const stocks = this.stocks.find((stock) => stock.ticker === ticker);
+    if (!stocks || stocks.stockAverageValue === 0) return true;
+
+    return false;
+  }
+
+  private isAccountBlocked(): boolean {
+    if (this.errorCounter >= 3) return true;
+    return false;
+  }
+
+  private updateEmptyWallet(ticker: string, stockAverageValue: number): void {
+    this.stocks.forEach((stock) => {
+      if (stock.ticker === ticker) {
+        // eslint-disable-next-line no-param-reassign
+        stock.balance = 0;
+        // eslint-disable-next-line no-param-reassign
+        stock.stockAverageValue = stockAverageValue;
+      }
+    });
+  }
+
+  private updateWalletAfterBuy(newStocks: number, newStockAverageValue: number): void {
+    this.stocks += newStocks;
+    this.stockAverageValue = newStockAverageValue;
   }
 
   private calculateSellBalance(unitCost: number, soldStocks: number): number {
@@ -69,14 +114,8 @@ export class Wallet {
     return tax;
   }
 
-  public sell(unitCost: number, quantity: number): Tax {
-    const operationTotalCost = unitCost * quantity;
-    const operationBalance = this.calculateSellBalance(unitCost, quantity);
-
-    this.updateWalletAfterSell(quantity, operationBalance);
-
-    const tax = this.calculateTax(operationBalance, operationTotalCost);
-
-    return { tax };
+  private hasWalletSufficientStocksToSell(quantity: number): boolean {
+    if (quantity <= this.stocks) return true;
+    return false;
   }
 }

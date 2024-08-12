@@ -53,6 +53,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -67,6 +68,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -79,6 +81,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -96,6 +99,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -116,6 +120,7 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -129,6 +134,7 @@ describe('Wallet class', () => {
       const quantity = 10;
       const newStockAverageValue = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -145,6 +151,7 @@ describe('Wallet class', () => {
       const quantity = 10;
       const expectedTax = { tax: 0 };
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
       WalletMock.updateEmptyWallet.mockReturnValueOnce(null);
       StockAverageValueCalculatorMock.execute.mockReturnValueOnce(10);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
@@ -248,6 +255,8 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
       WalletMock.calculateTax.mockReturnValueOnce(0);
 
@@ -259,6 +268,8 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
       WalletMock.calculateTax.mockReturnValueOnce(0);
 
@@ -270,6 +281,8 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.calculateSellBalance.mockReturnValueOnce(0);
       WalletMock.calculateTax.mockReturnValueOnce(0);
 
@@ -282,6 +295,8 @@ describe('Wallet class', () => {
       const quantity = 10;
       const sellBalance = 15;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.calculateSellBalance.mockReturnValueOnce(sellBalance);
       WalletMock.calculateTax.mockReturnValueOnce(0);
 
@@ -296,6 +311,8 @@ describe('Wallet class', () => {
       const unitCost = 10;
       const quantity = 10;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.calculateSellBalance.mockReturnValueOnce(0);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
@@ -309,6 +326,8 @@ describe('Wallet class', () => {
       const operationTotalCost = unitCost * quantity;
       const sellBalance = 15;
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.calculateSellBalance.mockReturnValueOnce(sellBalance);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
 
@@ -324,6 +343,8 @@ describe('Wallet class', () => {
       const quantity = 10;
       const expectedTax = { tax: 20 };
 
+      WalletMock.isAccountBlocked.mockReturnValueOnce(false);
+      WalletMock.hasWalletSufficientStocksToSell.mockReturnValueOnce(true);
       WalletMock.calculateSellBalance.mockReturnValueOnce(0);
       WalletMock.updateWalletAfterBuy.mockReturnValueOnce(null);
       WalletMock.calculateTax.mockReturnValueOnce(expectedTax.tax);
@@ -331,6 +352,48 @@ describe('Wallet class', () => {
       const tax = WalletSUT.sell(unitCost, quantity);
 
       expect(tax).toEqual(expectedTax);
+    });
+  });
+  describe('(private) hasWalletSufficientStocksToSell method', () => {
+    it('should return true if quantity <= total stocks in wallet', () => {
+      (WalletSUT as any).stocks = 10;
+
+      const quantity = 2;
+      const expectedOutput = true;
+
+      const output = (WalletSUT as any).hasWalletSufficientStocksToSell(quantity);
+
+      expect(output).toEqual(expectedOutput);
+    });
+    it('should return false if quantity > total stocks in wallet', () => {
+      (WalletSUT as any).stocks = 10;
+
+      const quantity = 20;
+      const expectedOutput = false;
+
+      const output = (WalletSUT as any).hasWalletSufficientStocksToSell(quantity);
+
+      expect(output).toEqual(expectedOutput);
+    });
+  });
+  describe('(private) isAccountBlocked method', () => {
+    it('should return true if "errorCounter" >= 3', () => {
+      (WalletSUT as any).errorCounter = 3;
+
+      const expectedOutput = true;
+
+      const output = (WalletSUT as any).isAccountBlocked();
+
+      expect(output).toEqual(expectedOutput);
+    });
+    it('should return false if "errorCounter" < 3', () => {
+      (WalletSUT as any).errorCounter = 2;
+
+      const expectedOutput = false;
+
+      const output = (WalletSUT as any).isAccountBlocked();
+
+      expect(output).toEqual(expectedOutput);
     });
   });
 });

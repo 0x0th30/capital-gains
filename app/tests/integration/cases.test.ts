@@ -129,4 +129,44 @@ describe('Integration', () => {
     (ControllerSUT as any).stdinCallback(input);
     expect(ControllerMock.runSimulations).toHaveReturnedWith(expectedOutput);
   });
+  test('Case 9', () => {
+    const input = '[{"operation":"buy", "unit-cost":10, "quantity": 10000},'
+    + '{"operation":"sell", "unit-cost":20, "quantity": 11000}]';
+    const expectedOutput = [
+      [{ tax: 0 }, { error: "Can't sell more stocks than you have" }],
+    ];
+
+    (ControllerSUT as any).stdinCallback(input);
+    expect(ControllerMock.runSimulations).toHaveReturnedWith(expectedOutput);
+  });
+  test('Case 10', () => {
+    const input = '[{"operation":"sell", "unit-cost":20, "quantity": 10000},'
+    + '{"operation":"sell", "unit-cost":20, "quantity": 10000},'
+    + '{"operation":"sell", "unit-cost":20, "quantity": 10000},'
+    + '{"operation":"buy", "unit-cost":10, "quantity": 10000}]';
+    const expectedOutput = [
+      [
+        { error: "Can't sell more stocks than you have" },
+        { error: "Can't sell more stocks than you have" },
+        { error: "Can't sell more stocks than you have" },
+        { error: 'Your account is blocked' },
+      ],
+    ];
+
+    (ControllerSUT as any).stdinCallback(input);
+    expect(ControllerMock.runSimulations).toHaveReturnedWith(expectedOutput);
+  });
+  test('Case 11', () => {
+    // eslint-disable-next-line max-len
+    const input = '[{"operation":"buy", "unit-cost":10, "quantity": 10000, "ticker":"AAPL"},'
+    + '{"operation":"buy", "unit-cost":15, "quantity": 10000, "ticker":"MANU"},'
+    + '{"operation":"sell", "unit-cost":20, "quantity": 10000, "ticker":"AAPL"},'
+    + '{"operation":"sell", "unit-cost":30, "quantity": 10000, "ticker":"MANU"}]';
+    const expectedOutput = [
+      [{ tax: 0 }, { tax: 0 }, { tax: 20000 }, { tax: 30000 }],
+    ];
+
+    (ControllerSUT as any).stdinCallback(input);
+    expect(ControllerMock.runSimulations).toHaveReturnedWith(expectedOutput);
+  });
 });
